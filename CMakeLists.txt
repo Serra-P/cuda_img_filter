@@ -8,8 +8,8 @@ cmake_policy(SET CMP0079 NEW)
 
 find_package(CUDAToolkit REQUIRED)
 
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Wall -Wextra")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Wold-style-cast")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --extended-lambda -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 set(CMAKE_CUDA_ARCHITECTURES "native")
 
@@ -31,3 +31,12 @@ target_link_libraries(main
 )
 
 install(TARGETS main DESTINATION bin)
+
+set(IMG_DIR "${CMAKE_SOURCE_DIR}/data")
+set(IMG_DEST_DIR "${CMAKE_BINARY_DIR}/data")
+
+add_custom_command(
+  TARGET main POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${IMG_DIR} ${IMG_DEST_DIR}
+  COMMENT "Copie du dossier img vers le repertoire de build"
+)
